@@ -12,15 +12,3 @@ Important notes:
 - This module only handles raw data ingestion
 """
 
-
-"""
-EVDS Ingestion Module
-
-Purpose:
-- Connect to EVDS API
-- Fetch raw macroeconomic / financial time series
-- Store data in raw format without transformation
-
-This module is responsible ONLY for ingestion.
-No cleaning, no aggregation, no analytics.
-"""
