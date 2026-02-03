@@ -1,13 +1,31 @@
+import os
+import sys
+from dotenv import load_dotenv
 from evds import evdsAPI
 from pyspark.sql import SparkSession
 
-# EVDS API Key
-API_KEY = "xZJ30MxLIp"
+# ----------------------------
+# Spark Ortam Yapılandırması
+# ----------------------------
+# Windows üzerinde Spark'ın Python'u bulabilmesi için gerekli
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 
-# EVDS bağlantısı
+# ----------------------------
+# Yapılandırma Yükleme (.env)
+# ----------------------------
+current_dir = os.path.dirname(os.path.abspath(__file__))
+dotenv_path = os.path.join(current_dir, ".env")
+load_dotenv(dotenv_path)
+
+API_KEY = os.getenv("EVDS_API_KEY")
+if not API_KEY:
+    raise Exception("Hata: EVDS_API_KEY .env dosyasında bulunamadı!")
+
+# ----------------------------
+# Veri Çekme (EVDS)
+# ----------------------------
 evds = evdsAPI(API_KEY)
-
-# EVDS'den veri çekme
 df = evds.get_data(
     series=["TP.DK.USD.S.YTL"],
     startdate="01-01-2024",
@@ -16,7 +34,9 @@ df = evds.get_data(
     aggregation_types="avg"
 )
 
-# Spark session oluşturma
+# ----------------------------
+# Spark İşlemleri
+# ----------------------------
 spark = SparkSession.builder \
     .appName("EVDS_Data_Engineering") \
     .getOrCreate()
@@ -24,8 +44,7 @@ spark = SparkSession.builder \
 # Pandas DataFrame -> PySpark DataFrame
 spark_df = spark.createDataFrame(df)
 
-# Kontrol amaçlı gösterim
+# Sonuçları Göster
 spark_df.show()
-from pyspark.sql import SparkSession
-print("PYSPARK OK")
-  
+
+print("Islem Basariyla Tamamlandi.")
