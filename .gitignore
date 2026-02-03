@@ -1,0 +1,8 @@
+# Data files
+data/
+src/ingestion/data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

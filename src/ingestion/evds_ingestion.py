@@ -1,14 +1,56 @@
-"""
-EVDS Ingestion Module
+"""from evds import evdsAPI
+from pyspark.sql import SparkSession
 
-This module is responsible for:
-- Connecting to the EVDS data source
-- Fetching raw financial data
-- Storing the data in the raw data layer without transformation
+# EVDS API Key
+API_KEY = "xZJ30MxLIp"
 
-Important notes:
-- No data cleaning is performed here
-- No analysis or processing is done in this step
-- This module only handles raw data ingestion
-"""
+# EVDS bağlantısı
+evds = evdsAPI(API_KEY)
 
+# EVDS'den veri çekme
+df = evds.get_data(
+    series=["TP.DK.USD.S.YTL"],
+    startdate="01-01-2024",
+    enddate="31-01-2024",
+    frequency=1,
+    aggregation_types="avg"
+)
+
+# Spark session oluşturma
+spark = SparkSession.builder \
+    .appName("EVDS_Data_Engineering") \
+    .getOrCreate()
+
+# Pandas DataFrame -> PySpark DataFrame
+spark_df = spark.createDataFrame(df)
+
+# Kontrol amaçlı gösterim
+spark_df.show()
+from pyspark.sql import SparkSession
+print("PYSPARK OK")
+    """
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+# 1. Spark başlat
+spark = SparkSession.builder \
+    .appName("SimplePipeline") \
+    .config("spark.sql.warehouse.dir", "file:/C:/tmp/spark-warehouse") \
+    .getOrCreate()
+
+# 2. Veri oku (örnek: CSV)
+df = spark.read \
+    .option("header", "true") \
+    .option("inferSchema", "true") \
+    .csv("data/input.csv")
+
+# 3. Transform (örnek işlem)
+df_clean = df.filter(col("value").isNotNull())
+
+# 4. Sonucu yaz
+df_clean.write \
+    .mode("overwrite") \
+    .parquet("data/output")
+
+# 5. Spark kapat
+spark.stop()
