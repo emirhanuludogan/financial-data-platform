@@ -1,4 +1,4 @@
-"""from evds import evdsAPI
+from evds import evdsAPI
 from pyspark.sql import SparkSession
 
 # EVDS API Key
@@ -28,29 +28,4 @@ spark_df = spark.createDataFrame(df)
 spark_df.show()
 from pyspark.sql import SparkSession
 print("PYSPARK OK")
-    """
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
-
-# 1. Spark başlat
-spark = SparkSession.builder \
-    .appName("SimplePipeline") \
-    .config("spark.sql.warehouse.dir", "file:/C:/tmp/spark-warehouse") \
-    .getOrCreate()
-
-# 2. Veri oku (örnek: CSV)
-df = spark.read \
-    .option("header", "true") \
-    .option("inferSchema", "true") \
-    .csv("data/input.csv")
-
-# 3. Transform (örnek işlem)
-df_clean = df.filter(col("value").isNotNull())
-
-# 4. Sonucu yaz
-df_clean.write \
-    .mode("overwrite") \
-    .parquet("data/output")
-
-# 5. Spark kapat
-spark.stop()
+  
