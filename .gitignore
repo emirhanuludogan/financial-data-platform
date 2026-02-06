@@ -1,6 +1,19 @@
+# Veri Katmanları (Büyük dosyalar GitHub'a yüklenmez)
 data/
-.env
-__pycache__/
-.venv/
-.vs/
 notebooks/output_data/
+
+# Hassas Bilgiler (API Key vb.)
+.env
+
+# Python ve Editör Kalıntıları
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.vscode/
+.vs/
+
+# Spark Log ve Geçici Dosyalar
+spark-warehouse/
+metastore_db/
+derby.log
