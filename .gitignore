@@ -2,3 +2,5 @@ data/
 .env
 __pycache__/
 .venv/
+.vs/
+notebooks/output_data/

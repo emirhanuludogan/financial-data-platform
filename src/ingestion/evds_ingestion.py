@@ -18,9 +18,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 dotenv_path = os.path.join(current_dir, ".env")
 load_dotenv(dotenv_path)
 
-API_KEY = os.getenv("EVDS_API_KEY")
+API_KEY = os.getenv("EVDS_API_KEY")  
 if not API_KEY:
-    raise Exception("Hata: EVDS_API_KEY .env dosyasında bulunamadı!")
+    raise Exception("Hata: EVDS_API_KEY .env dosyasında bulunamadı!")  
 
 # ----------------------------
 # Veri Çekme (EVDS)
@@ -41,10 +41,12 @@ spark = SparkSession.builder \
     .appName("EVDS_Data_Engineering") \
     .getOrCreate()
 
-# Pandas DataFrame -> PySpark DataFrame
+# Pandas DataFrame -> PySpark DataFrame  
 spark_df = spark.createDataFrame(df)
 
-# Sonuçları Göster
+# Sonuçları Göster    
 spark_df.show()
 
 print("Islem Basariyla Tamamlandi.")
+
+
