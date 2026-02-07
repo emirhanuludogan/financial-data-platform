@@ -5,7 +5,7 @@ from src.processing import run_processing
 from src.features import run_features
 
 def main():
-    # Emojiler kaldırıldı, sadece düz metin bırakıldı
+   
     print("--- ETL Pipeline Baslatiliyor ---\n")
 
     try:
