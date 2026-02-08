@@ -77,7 +77,7 @@ pip install -r requirements.txt
  
  ------------------------------------------------------------------------------------------------------ 
   
-3️⃣ API Yapılandırması (Kritik Adım)
+3️⃣ API Yapılandırması 
 
 Projenin kök dizininde .env adlı bir dosya oluşturun ve
 TCMB (EVDS) üzerinden aldığınız API anahtarını aşağıdaki formatta ekleyin:
@@ -98,3 +98,10 @@ Alternatif olarak analiz sürecini gözlemlemek için notebooks/demo.ipynb dosya
 
 ------------------------------------------------------------------------------------------------------
 
+## Kaynakça (References)
+Bu projenin mimarisi ve ETL süreçleri aşağıdaki modern metodoloji takip edilerek geliştirilmiştir:
+
+* **Matt Palmer** - *Understanding ETL: Data Pipelines for Modern Data Architectures* (2024, O'Reilly Media, Inc.)
+
+## 🤝 Teşekkür (Acknowledgments)
+* Teknik istişareleri ve desteği için **[Onur Güner]**'e teşekkürler.
