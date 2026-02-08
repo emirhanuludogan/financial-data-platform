@@ -97,3 +97,4 @@ python main.py
 Alternatif olarak analiz sürecini gözlemlemek için notebooks/demo.ipynb dosyasını kullanabilirsiniz.
 
 ------------------------------------------------------------------------------------------------------
+
