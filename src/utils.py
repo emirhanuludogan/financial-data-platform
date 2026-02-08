@@ -53,3 +53,4 @@ def get_spark_session(app_name="FinancialDataPlatform"):
         .appName(app_name) \
         .config("spark.sql.parquet.compression.codec", "snappy") \
         .getOrCreate()
+
