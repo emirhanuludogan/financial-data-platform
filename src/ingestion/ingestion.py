@@ -68,7 +68,7 @@ def run_ingestion():
         logger.info("BAŞARILI: Ingestion sureci tamamlandi ve ham veri muhurlendi.")
 
     except Exception as e:
-        # Hata izole etme ve detaylı raporlama 
+        # Hata izole etme ve detaylı raporlama   
         logger.error(f"Ingestion surecinde beklenmedik KRITIK HATA: {str(e)}")
         raise e
 
