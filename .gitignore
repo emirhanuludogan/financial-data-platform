@@ -26,3 +26,4 @@ _SUCCESS            # Başarılı kayıt bayrakları
 # --- Pipeline İzleme (Logging) ---
 logs/               # Senin oluşturduğun pipeline.log dosyalarını gizler
 *.log               # Diğer tüm sistem logları
+
