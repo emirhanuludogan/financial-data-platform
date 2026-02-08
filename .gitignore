@@ -17,3 +17,12 @@ __pycache__/
 spark-warehouse/
 metastore_db/
 derby.log
+
+# --- Ekstra Veri Güvenliği ---
+*.parquet           # Tüm alt klasörlerdeki parquet dosyalarını kapsar
+*.crc               # Spark'ın Windows'ta oluşturduğu kontrol dosyaları
+_SUCCESS            # Başarılı kayıt bayrakları
+
+# --- Pipeline İzleme (Logging) ---
+logs/               # Senin oluşturduğun pipeline.log dosyalarını gizler
+*.log               # Diğer tüm sistem logları

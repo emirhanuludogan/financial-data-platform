@@ -1,33 +1,35 @@
-# 📈 Financial Data Platform (Spark ETL Pipeline)
+# Financial Data Platform (Spark ETL Pipeline)
 
 Bu proje, TCMB (EVDS) üzerinden alınan finansal verilerin **PySpark** kullanılarak işlendiği, temizlendiği ve analize hazır hale getirildiği uçtan uca bir **Veri Mühendisliği (ETL)** pipeline çalışmasıdır.
 Proje, kurumsal standartlara uygun olarak Medallion Architecture (Bronze, Silver, Gold) prensipleriyle yapılandırılmıştır.
 
 ---
 
-## 🚀 Öne Çıkan Özellikler
+## Öne Çıkan Özellikler
 
 * **Dinamik Veri Alımı:** TCMB EVDS API entegrasyonu ile gerçek zamanlıya yakın veri çekimi.
 * **Büyük Veri İşleme:** PySpark kullanarak verinin dağıtık mimaride işlenmesi.
 * **Feature Engineering:** `Window Functions` ve `Lag` metotları kullanılarak günlük döviz kuru değişim yüzdelerinin hesaplanması.
+* **Gözlemlenebilirlik (Observability):** Merkezi logging sistemi ile tüm pipeline adımlarının ve çalışma sürelerinin (**runtime**) anlık takibi.
 * **Veri Kalitesi (Data Quality):** Eksik verilerin (Null/NaN) temizlenmesi ve şema (schema) doğrulama süreçleri.
 * **Çoklu Depolama:** Verilerin hem insan-okunabilir (**CSV**) hem de performans odaklı (**Parquet**) formatlarda kaydedilmesi.
 * **Modüler:** Script Yapısı: Her ETL adımının (**Ingestion, Processing, Features**) ayrı ve tek sorumluluğa sahip scriptler tarafından yönetilmesi.
 * **Orkestrasyon:** Tüm sürecin merkezi bir main.py üzerinden yönetilmesi.
 
 ---
-## 🏗️ Veri Mimarisi (Medallion Architecture)
+##  Veri Mimarisi (Medallion Architecture)
 
-Proje, veriyi ham halinden analitik değere dönüştürmek için üç katmanlı bir hiyerarşi kullanır:
+Proje akışı, veriyi ham halinden analitik değere dönüştürmek için şu mantıksal hattı takip eder:
 
-Bronze (Raw): EVDS API üzerinden çekilen ham verilerin hiçbir değişiklik yapılmadan Parquet formatında saklandığı katman.
+ Raw (Bronze): EVDS API üzerinden çekilen ham verilerin hiçbir değişiklik yapılmadan Parquet formatında saklandığı, "değişmez" (**immutable**) katman.
 
-Silver (Processed): Veri tiplerinin düzenlendiği, eksik verilerin (Null/NaN) temizlendiği ve şema doğrulamasının yapıldığı katman.
+Silver (Processed): Veri tiplerinin düzenlendiği, eksik verilerin temizlendiği ve verinin analize uygun hale getirildiği "temiz" katman.
 
-Gold (Analytics): Window Functions ve Lag metotları kullanılarak finansal özelliklerin (günlük değişim yüzdeleri vb.) hesaplandığı analitik katman.
+Gold (Analytics): İş mantığı (**Business Logic**) eklenerek finansal özelliklerin hesaplandığı, nihai raporlama katmanı.
+
 ---
 
-## 🛠️ Teknoloji Stack'i
+##  Teknoloji Stack'i
 
 * **Dil:** Python 3.10.11
 * **Framework:** Apache Spark 
@@ -37,22 +39,24 @@ Gold (Analytics): Window Functions ve Lag metotları kullanılarak finansal öze
 
 ---
 
-## 📂 Proje Yapısı
+##  Proje Yapısı
 
-├── data/               # Git-ignored (Raw, Silver, Gold katmanları)
+├── data/               # Git-ignored: Yerel veri depolama (Raw, Silver, Gold)
+├── logs/               # Git-ignored: Zaman mühürlü pipeline günlükleri
 ├── notebooks/          # Veri keşfi ve demo görselleştirmeler
 ├── src/                # ETL Pipeline modülleri
-│   ├── ingestion/      # Veri alımı (Bronze)
-│   ├── processing.py   # Veri temizleme (Silver)
-│   ├── features.py     # Özellik mühendisliği (Gold)
-│   └── utils.py        # Spark ve Env yardımcı fonksiyonları
-├── .env                # API Anahtarları (Git-ignored)
+│   ├── ingestion/      # Veri alımı (Raw Layer)
+│   │   └── ingestion.py
+│   ├── processing.py   # Veri temizleme (Silver Layer)
+│   ├── features.py     # Özellik mühendisliği (Gold Layer)
+│   └── utils.py        # Merkezi logger ve Spark konfigürasyonu
+├── .env                # Git-ignored: API Key yönetimi
 ├── .gitignore          # Gereksiz dosyaların takibini engelleyen liste
-└── main.py             # Pipeline Orkestrasyon Scripti         # API Anahtarları ve hassas veriler (Git-ignored)
-
+└── main.py             # Pipeline Orkestrasyon (Şef) Scripti
+├── requirements.txt    # Proje bağımlılıkları listesi
 
 ------------------------------------------------------------------------------------------------------
-⚙️ Kurulum ve Çalıştırma
+ Kurulum ve Çalıştırma
 
 Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları sırasıyla takip edin.
 
@@ -66,11 +70,8 @@ cd financial-data-platform
 ------------------------------------------------------------------------------------------------------
 
 2️⃣ Gerekli Kütüphaneleri Yükleyin
-
-Spark ve API bağlantısı için gerekli Python bağımlılıklarını kurun:
-
-pip install pyspark python-dotenv evds
-
+Bash
+pip install -r requirements.txt
 
 ⚠️ Python 3.10+ kullanmanız önerilir.
  
@@ -83,15 +84,13 @@ TCMB (EVDS) üzerinden aldığınız API anahtarını aşağıdaki formatta ekle
 
 EVDS_API_KEY=buraya_api_anahtarinizi_yazin
 
-
-
 🔐 .env dosyası güvenlik sebebiyle .gitignore içinde yer almaktadır.
 
 ------------------------------------------------------------------------------------------------------
 4️⃣ Pipeline'ı Başlatın
 
-Tüm ETL sürecini (Ingestion -> Processing -> Features) tek bir komutla çalıştırabilirsiniz:
-
+Bash
+Tüm süreci merkezi orkestratör üzerinden tetikleyin:
 Bash
 python main.py
 
