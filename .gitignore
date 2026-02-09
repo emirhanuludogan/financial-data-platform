@@ -1,29 +1,25 @@
-# Veri Katmanları (Büyük dosyalar GitHub'a yüklenmez)
+# Veri Dosyaları 
 data/
-notebooks/output_data/
+*.parquet
+*.csv
+*.crc
+*.json
 
-# Hassas Bilgiler (API Key vb.)
-.env
+# Loglar
+ # logs/*.log
 
-# Python ve Editör Kalıntıları
+# Python Önbellekleri
 __pycache__/
 *.py[cod]
 *$py.class
-.venv/
+.ipynb_checkpoints/
+
+# Ortam Dosyaları
+.env
+.venv
+venv/
+env/
+
+# IDE Dosyaları
 .vscode/
-.vs/
-
-# Spark Log ve Geçici Dosyalar
-spark-warehouse/
-metastore_db/
-derby.log
-
-# --- Ekstra Veri Güvenliği ---
-*.parquet           # Tüm alt klasörlerdeki parquet dosyalarını kapsar
-*.crc               # Spark'ın Windows'ta oluşturduğu kontrol dosyaları
-_SUCCESS            # Başarılı kayıt bayrakları
-
-# --- Pipeline İzleme (Logging) ---
-logs/               # Senin oluşturduğun pipeline.log dosyalarını gizler
-*.log               # Diğer tüm sistem logları
-
+.idea/

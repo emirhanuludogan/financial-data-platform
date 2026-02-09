@@ -1,0 +1,87 @@
+2026-02-09 04:25:54 - Orchestrator_Main - INFO - === ETL PIPELINE BASLATILDI ===
+2026-02-09 04:25:54 - Orchestrator_Main - INFO - >>> ADIM 1: Ingestion (Raw) süreci tetikleniyor...
+2026-02-09 04:25:54 - Ingestion_Layer - INFO - ETL Baslatildi --- Root Dizini: C:\Users\EMÝRHAN\Desktop\FinancialDataPlatform
+2026-02-09 04:25:54 - Ingestion_Layer - INFO - TCMB EVDS API'sine baglanti kuruluyor...
+2026-02-09 04:25:54 - Ingestion_Layer - INFO - Veri basariyla cekildi. Kayit Sayisi: 732
+2026-02-09 04:25:54 - Ingestion_Layer - INFO - Spark oturumu yonetiliyor...
+WARNING: Using incubator modules: jdk.incubator.vector
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+2026-02-09 04:25:58 - Ingestion_Layer - INFO - Eski veri temizleniyor: C:\Users\EMÝRHAN\Desktop\FinancialDataPlatform\data\raw\usd_kur_raw.parquet
+2026-02-09 04:25:58 - Ingestion_Layer - INFO - Veri raw katmanina yaziliyor: C:\Users\EMÝRHAN\Desktop\FinancialDataPlatform\data\raw\usd_kur_raw.parquet
+[Stage 0:>                                                        (0 + 20) / 20]26/02/09 04:26:03 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 95,00% for 8 writers
+26/02/09 04:26:04 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 84,44% for 9 writers
+26/02/09 04:26:04 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 76,00% for 10 writers
+26/02/09 04:26:05 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 69,09% for 11 writers
+26/02/09 04:26:05 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 63,33% for 12 writers
+26/02/09 04:26:06 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 58,46% for 13 writers
+26/02/09 04:26:06 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 54,29% for 14 writers
+26/02/09 04:26:07 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 50,67% for 15 writers
+26/02/09 04:26:07 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 47,50% for 16 writers
+26/02/09 04:26:08 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 44,71% for 17 writers
+26/02/09 04:26:08 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 42,22% for 18 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 40,00% for 19 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 38,00% for 20 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 40,00% for 19 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 42,22% for 18 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 44,71% for 17 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 47,50% for 16 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 50,67% for 15 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 54,29% for 14 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 58,46% for 13 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 63,33% for 12 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 69,09% for 11 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 76,00% for 10 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 84,44% for 9 writers
+26/02/09 04:26:09 WARN MemoryManager: Total allocation exceeds 95,00% (1.020.054.720 bytes) of heap memory
+Scaling row group sizes to 95,00% for 8 writers
+                                                                                2026-02-09 04:26:10 - Ingestion_Layer - INFO - BAÞARILI: Ingestion sureci tamamlandi ve ham veri muhurlendi.
+2026-02-09 04:26:10 - Orchestrator_Main - INFO - >>> ADIM 1: Ingestion baþarýyla tamamlandý.
+2026-02-09 04:26:10 - Orchestrator_Main - INFO - >>> ADIM 2: Processing (Silver) süreci tetikleniyor...
+2026-02-09 04:26:10 - Processing_Silver - INFO - ADIM 2: Silver (Processing) sureci baslatildi.
+26/02/09 04:26:10 WARN SparkSession: Using an existing Spark session; only runtime SQL configurations will take effect.
+2026-02-09 04:26:10 - Processing_Silver - INFO - Silver veri mühürleniyor: C:\Users\EMÝRHAN\Desktop\FinancialDataPlatform\data\silver\usd_kur_cleaned.parquet
+2026-02-09 04:26:11 - Processing_Silver - INFO - BAÞARILI: Silver katmaný tamamlandý.
+2026-02-09 04:26:11 - Orchestrator_Main - INFO - >>> ADIM 2: Processing baþarýyla tamamlandý.
+2026-02-09 04:26:11 - Orchestrator_Main - INFO - >>> ADIM 3: Features (Gold) süreci tetikleniyor...
+2026-02-09 04:26:11 - Features_Gold - INFO - ADIM 3: Gold (Feature Engineering) süreci baþlatýldý.
+26/02/09 04:26:11 WARN SparkSession: Using an existing Spark session; only runtime SQL configurations will take effect.
+2026-02-09 04:26:11 - Features_Gold - INFO - Analitik hesaplamalar yapýlýyor...
+2026-02-09 04:26:11 - Features_Gold - INFO - Gold veri mühürleniyor: C:\Users\EMÝRHAN\Desktop\FinancialDataPlatform\data\gold\usd_kur_features.parquet
+26/02/09 04:26:11 WARN WindowExec: No Partition Defined for Window operation! Moving all data to a single partition, this can cause serious performance degradation.
+26/02/09 04:26:11 WARN WindowExec: No Partition Defined for Window operation! Moving all data to a single partition, this can cause serious performance degradation.
+26/02/09 04:26:11 WARN WindowExec: No Partition Defined for Window operation! Moving all data to a single partition, this can cause serious performance degradation.
+26/02/09 04:26:11 WARN WindowExec: No Partition Defined for Window operation! Moving all data to a single partition, this can cause serious performance degradation.
+26/02/09 04:26:11 WARN WindowExec: No Partition Defined for Window operation! Moving all data to a single partition, this can cause serious performance degradation.
+2026-02-09 04:26:11 - Features_Gold - INFO - BAÞARILI: Gold katmaný ve tüm pipeline tamamlandý!
+2026-02-09 04:26:11 - Orchestrator_Main - INFO - >>> ADIM 3: Features baþarýyla tamamlandý.
+2026-02-09 04:26:11 - Orchestrator_Main - INFO - === ETL SURECI BASARIYLA TAMAMLANDI (Sure: 17.71 saniye) ===
+SUCCESS: The process with PID 17796 (child process of PID 30108) has been terminated.
+SUCCESS: The process with PID 30108 (child process of PID 13324) has been terminated.
+SUCCESS: The process with PID 13324 (child process of PID 31356) has been terminated.
+[Pzt 09.02.2026  4:26:11,90] Otomatik calistirma basarili. 
