@@ -43,25 +43,30 @@ Gold (Analytics): İş mantığı (**Business Logic**) eklenerek finansal özell
 ---
 
 ##  Proje Yapısı
-
 ├── data/               # Git-ignored: Yerel veri depolama (Raw, Silver, Gold)
 │   ├── raw/            # Ham verilerin saklandığı katman (Bronze)
 │   ├── silver/         # Temizlenmiş verilerin saklandığı katman
 │   └── gold/           # Analiz ve rapor hazır verilerin saklandığı katman
 ├── logs/               # Git-ignored: Zaman mühürlü pipeline günlükleri
-│   └── automation.log  # Merkezi log dosyası (Tüm ETL adımları burada tutulur)
+│   └── automation.log  # Merkezi log dosyası
 ├── notebooks/          # Veri keşfi ve demo görselleştirmeler
-├── src/                # ETL Pipeline modülleri
-│   ├── ingestion/      # Veri alımı (Raw Layer)
+├── src/                # ETL Pipeline modülleri (Paket yapısı)
+│   ├── __init__.py     # Python paket tanımlayıcısı
+│   ├── ingestion/      # Veri alımı modülü
+│   │   ├── __init__.py
 │   │   └── ingestion.py
+│   ├── pipelines/      # ORKESTRASYON KATMANI (Yeni eklenen bölüm)
+│   │   ├── __init__.py # Paket tanımlayıcısı
+│   │   └── main.py     # Ana Pipeline Akışı 
 │   ├── processing.py   # Veri temizleme (Silver Layer)
 │   ├── features.py     # Özellik mühendisliği (Gold Layer)
-│   └── utils.py        # Merkezi logger ve Spark konfigürasyonu
+│   ├── logger.py       # Log yönetimi (Eski yapıdan farklılaşmış olabilir)
+│   └── utils.py        # Yardımcı fonksiyonlar ve Spark konfigürasyonu
 ├── .env                # Git-ignored: API Key yönetimi
-├── .gitignore          # Gereksiz dosyaların takibini engelleyen liste
-├── main.py             # Pipeline Orkestrasyon (Şef) Scripti
-├──  run_pipeline.bat   # Windows Otomasyon Tetikleyicisi (Tek tıkla tüm akışı başlatır)
-└── requirements.txt    #  Proje bağımlılıkları (pyspark, pathlib, shutil, python-dotenv eklendi)
+├── .gitignore          # Takip edilmeyecek dosyalar listesi
+├── run.py              # TETİKLEYİCİ: Kök dizinden pipeline'ı başlatan dosya
+├── run_pipeline.bat    # Windows Otomasyon (İçeriği 'python run.py' olarak güncellenmeli)
+└── requirements.txt    # Proje bağımlılıkları
 ------------------------------------------------------------------------------------------------------
  Kurulum ve Çalıştırma
 
@@ -99,7 +104,7 @@ EVDS_API_KEY=buraya_api_anahtarinizi_yazin
 Bash
 Tüm süreci merkezi orkestratör üzerinden tetikleyin:
 Bash
-python main.py
+python -m src.pipelines.main
 
 Alternatif olarak analiz sürecini gözlemlemek için notebooks/demo.ipynb dosyasını kullanabilirsiniz.
 
