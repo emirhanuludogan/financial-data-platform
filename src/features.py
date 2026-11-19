@@ -16,18 +16,18 @@ def run_features():
     logger.info("ADIM 3: Gold (Feature Engineering) süreci başlatıldı.")
     
     try:
-        spark = SparkSession.builder.appName("Gold_Layer_Features").getOrCreate()
-        
         # --- ROOT DİZİN BELİRLEME ---
         current_file = Path(__file__).resolve()
-        root_dir = next((p for p in current_file.parents if p.name == "FinancialDataPlatform"), current_file.parents[2])
+        root_dir = current_file.parents[1]
 
         input_path = root_dir / "data" / "silver" / "usd_kur_cleaned.parquet"
         output_path = root_dir / "data" / "gold" / "usd_kur_features.parquet"
         
         if not input_path.exists():
             logger.error(f"KRİTİK HATA: Silver verisi bulunamadı: {input_path}")
-            return
+            raise FileNotFoundError(f"Silver veri bulunamadi: {input_path}")
+
+        spark = SparkSession.builder.appName("Gold_Layer_Features").getOrCreate()
 
         # 1. Silver Veriyi Oku
         df = spark.read.parquet(str(input_path))

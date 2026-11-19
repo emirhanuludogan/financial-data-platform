@@ -15,18 +15,18 @@ def run_processing():
     logger.info("ADIM 2: Silver (Processing) sureci baslatildi.")
 
     try:
-        spark = SparkSession.builder.appName("Financial_Processing").getOrCreate()
-        
         # --- ROOT DİZİN BELİRLEME ---
         current_file = Path(__file__).resolve()
-        root_dir = next((p for p in current_file.parents if p.name == "FinancialDataPlatform"), current_file.parents[2])
+        root_dir = current_file.parents[1]
 
         raw_path = root_dir / "data" / "raw" / "usd_kur_raw.parquet"
         silver_path = root_dir / "data" / "silver" / "usd_kur_cleaned.parquet"
         
         if not raw_path.exists():
             logger.error(f"KRITIK HATA: {raw_path} bulunamadi!")
-            return
+            raise FileNotFoundError(f"Raw veri bulunamadi: {raw_path}")
+
+        spark = SparkSession.builder.appName("Financial_Processing").getOrCreate()
 
         # 1. Veri Okuma
         df = spark.read.parquet(str(raw_path))

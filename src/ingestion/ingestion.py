@@ -30,7 +30,7 @@ def run_ingestion():
     # KİTAP PRENSİBİ: Hata durumunda logger.error kullanımı
     if not api_key:
         logger.error("API ANAHTARI BULUNAMADI! Lutfen .env dosyasini kontrol edin.")
-        return
+        raise ValueError("EVDS_API_KEY bulunamadi. Repo kokundeki .env dosyasini kontrol edin.")
 
     logger.info(f"ETL Baslatildi --- Root Dizini: {root_dir}")
 
@@ -45,7 +45,7 @@ def run_ingestion():
         # Veri hacmi (Volume) kontrolü
         if df_pandas is None or len(df_pandas) == 0:
             logger.warning("API'den bos veri dondu! Ingestion durduruluyor.")
-            return
+            raise RuntimeError("EVDS API bos veri dondurdu; sonraki katmanlar calistirilmadi.")
             
         logger.info(f"Veri basariyla cekildi. Kayit Sayisi: {len(df_pandas)}")
 

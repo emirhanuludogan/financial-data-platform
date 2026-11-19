@@ -5,8 +5,12 @@ data/
 *.crc
 *.json
 
-# Loglar
- # logs/*.log
+# Yerel calistirma ciktilari
+logs/*.log
+notebooks/output_data/
+output_data/
+.env.*
+!.env.example
 
 # Python Önbellekleri
 __pycache__/

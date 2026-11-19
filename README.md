@@ -1,132 +1,122 @@
-# Financial Data Platform (Spark ETL Pipeline)
+# Financial Data Platform — EVDS ve PySpark ile Döviz Verisi İşleme
 
-Bu proje, TCMB (EVDS) üzerinden alınan finansal verilerin **PySpark** kullanılarak işlendiği, temizlendiği ve analize hazır hale getirildiği uçtan uca bir **Veri Mühendisliği (ETL)** pipeline çalışmasıdır.
-Proje, kurumsal standartlara uygun olarak Medallion Architecture (Bronze, Silver, Gold) prensipleriyle yapılandırılmıştır.
+TCMB EVDS'den döviz verisi alan, PySpark ile temizleyen ve önceki gözleme göre
+kur değişimini hesaplayan modüler bir veri mühendisliği projesi.
 
----
+Çalışma; veri alımı, dönüşüm, özellik üretimi ve günlük kaydını Raw/Bronze,
+Silver ve Gold katmanlarında bir araya getirir. Mevcut örnek, tek bir seri
+ve sabit tarih aralığı üzerinde çalışan **batch ETL** akışıdır.
 
-## Öne Çıkan Özellikler
+## Proje ne yapıyor?
 
-* **Dinamik Veri Alımı:** TCMB EVDS API entegrasyonu ile gerçek zamanlıya yakın veri çekimi.
-* **Büyük Veri İşleme:** PySpark kullanarak verinin dağıtık mimaride işlenmesi.
-* **Feature Engineering:** `Window Functions` ve `Lag` metotları kullanılarak günlük döviz kuru değişim yüzdelerinin hesaplanması.
-* **Gözlemlenebilirlik (Observability):** Merkezi logging sistemi ile tüm pipeline adımlarının ve çalışma sürelerinin (**runtime**) anlık takibi.
-* **Veri Kalitesi (Data Quality):** Eksik verilerin (Null/NaN) temizlenmesi ve şema (schema) doğrulama süreçleri.
-* **Kurşun Geçirmez Dosya Yönetimi:** Windows işletim sistemindeki dosya kilitlenme sorunlarını aşmak için shutil kütüphanesi ile hibrit temizlik stratejisi.
-* **Cross-Platform Path Yönetimi:** Pathlib kullanılarak Windows/Linux bağımsız dinamik kök dizin (root) tespiti.
-* **Çoklu Depolama:** Verilerin hem insan-okunabilir (**CSV**) hem de performans odaklı (**Parquet**) formatlarda kaydedilmesi.
-* **Modüler:** Script Yapısı: Her ETL adımının (**Ingestion, Processing, Features**) ayrı ve tek sorumluluğa sahip scriptler tarafından yönetilmesi.
-* **Orkestrasyon:** Tüm sürecin merkezi bir main.py üzerinden yönetilmesi.
-* **Otomasyon Desteği:** Pipeline'ın her sabah otomatik çalışmasını sağlayan .bat orkestrasyon desteği.
+1. EVDS'den `TP.DK.USD.S.YTL` serisini **01-01-2024 → 01-01-2026** aralığında çeker.
+2. Ham tabloyu `data/raw/` altında Parquet olarak yazar.
+3. Tarih ve kur alanlarını dönüştürüp Silver katmanını oluşturur.
+4. Tarih sırasındaki önceki değeri ve yüzde değişimi hesaplar.
+5. Gold çıktısını Parquet olarak, çalışma günlüklerini `logs/` altında kaydeder.
 
----
-##  Veri Mimarisi (Medallion Architecture)
+**EVDS → Raw/Bronze → Silver → Gold**
 
-Proje akışı, veriyi ham halinden analitik değere dönüştürmek için şu mantıksal hattı takip eder:
+Bu repo bir öğrenme ve geliştirme çalışmasıdır. Gerçek zamanlı veri akışı,
+artımlı yükleme veya üretim ortamı için doğrulanmış bir platform olarak sunulmaz.
 
- Raw (Bronze): EVDS API üzerinden çekilen ham verilerin hiçbir değişiklik yapılmadan Parquet formatında saklandığı, "değişmez" (**immutable**) katman.
+## Hızlı başlangıç
 
-Silver (Processed): Veri tiplerinin düzenlendiği, eksik verilerin temizlendiği ve verinin analize uygun hale getirildiği "temiz" katman.
+Python ve seçtiğiniz PySpark sürümüyle uyumlu bir Java kurulumu gerekir.
+`requirements.txt` sürümleri kilitlemez; ortam ayrıntıları
+[çalıştırma rehberinde](docs/OPERATIONS.md) açıklanır.
 
-Gold (Analytics): İş mantığı (**Business Logic**) eklenerek finansal özelliklerin hesaplandığı, nihai raporlama katmanı.
+Windows PowerShell:
 
----
-
-##  Teknoloji Stack'i
-
-* **Dil:** Python 3.10.11
-* **Framework:** Apache Spark 
-* **Kütüphaneler:**  Python-dotenv, evds, Pathlib, Shutil, Logging
-* **Veri Kaynağı:** TCMB EVDS API
-* **Depolama:** Parquet, CSV
-
----
-
-##  Proje Yapısı
-├── data/               # Git-ignored: Yerel veri depolama (Raw, Silver, Gold)
-│   ├── raw/            # Ham verilerin saklandığı katman (Bronze)
-│   ├── silver/         # Temizlenmiş verilerin saklandığı katman
-│   └── gold/           # Analiz ve rapor hazır verilerin saklandığı katman
-├── logs/               # Git-ignored: Zaman mühürlü pipeline günlükleri
-│   └── automation.log  # Merkezi log dosyası
-├── notebooks/          # Veri keşfi ve demo görselleştirmeler
-├── src/                # ETL Pipeline modülleri (Paket yapısı)
-│   ├── __init__.py     # Python paket tanımlayıcısı
-│   ├── ingestion/      # Veri alımı modülü
-│   │   ├── __init__.py
-│   │   └── ingestion.py
-│   ├── pipelines/      # ORKESTRASYON KATMANI (Yeni eklenen bölüm)
-│   │   ├── __init__.py # Paket tanımlayıcısı
-│   │   └── main.py     # Ana Pipeline Akışı 
-│   ├── processing.py   # Veri temizleme (Silver Layer)
-│   ├── features.py     # Özellik mühendisliği (Gold Layer)
-│   ├── logger.py       # Log yönetimi (Eski yapıdan farklılaşmış olabilir)
-│   └── utils.py        # Yardımcı fonksiyonlar ve Spark konfigürasyonu
-├── .env                # Git-ignored: API Key yönetimi
-├── .gitignore          # Takip edilmeyecek dosyalar listesi
-├── run.py              # TETİKLEYİCİ: Kök dizinden pipeline'ı başlatan dosya
-├── run_pipeline.bat    # Windows Otomasyon (İçeriği 'python run.py' olarak güncellenmeli)
-└── requirements.txt    # Proje bağımlılıkları
-------------------------------------------------------------------------------------------------------
- Kurulum ve Çalıştırma
-
-Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları sırasıyla takip edin.
-
-1️⃣ Depoyu Klonlayın
-
-Terminalinizi açın ve projeyi bilgisayarınıza indirin:
-
+```powershell
 git clone https://github.com/emirhanuludogan/financial-data-platform.git
 cd financial-data-platform
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+Copy-Item .env.example .env
+```
 
-------------------------------------------------------------------------------------------------------
+`.env` dosyasındaki `EVDS_API_KEY` alanına kendi EVDS anahtarınızı yazın.
+Ardından repo kökünden çalıştırın:
 
-2️⃣ Gerekli Kütüphaneleri Yükleyin
-Bash
-pip install -r requirements.txt
+```powershell
+.\.venv\Scripts\python.exe -m src.pipelines.main
+```
 
-⚠️ Python 3.10+ kullanmanız önerilir.
- 
- ------------------------------------------------------------------------------------------------------ 
-  
-3️⃣ API Yapılandırması 
+Windows betiği aynı giriş noktasını çağırır:
 
-Projenin kök dizininde .env adlı bir dosya oluşturun ve
-TCMB (EVDS) üzerinden aldığınız API anahtarını aşağıdaki formatta ekleyin:
+```powershell
+.\run_pipeline.bat
+```
 
-EVDS_API_KEY=buraya_api_anahtarinizi_yazin
+Betik zamanlama oluşturmaz; varsa `.venv` ortamını kullanır ve gerçek çıkış
+kodunu iletir. Linux/macOS'ta sanal ortamın `.venv/bin/python` çalıştırıcısıyla
+aynı Python modülü çağrılabilir; platform uyumluluğu ayrıca doğrulanmalıdır.
 
-🔐 .env dosyası güvenlik sebebiyle .gitignore içinde yer almaktadır.
+## Çıktılar
 
-------------------------------------------------------------------------------------------------------
-4️⃣ Pipeline'ı Başlatın
+| Konum | İçerik |
+| --- | --- |
+| `data/raw/usd_kur_raw.parquet/` | EVDS'den alınan ham tablonun Spark çıktısı |
+| `data/silver/usd_kur_cleaned.parquet/` | `Date`, `USD_Satis` |
+| `data/gold/usd_kur_features.parquet/` | Silver alanları, `Prev_USD_Satis`, `Daily_Change_Pct` |
+| `logs/pipeline.log` | Katman ve orkestratör günlükleri |
+| `logs/automation.log` | Windows betiğinin standart çıktı/hata kaydı |
 
-Bash
-Tüm süreci merkezi orkestratör üzerinden tetikleyin:
-Bash
-python -m src.pipelines.main
+`.parquet` yolları Spark çıktı dizinleridir. Her koşu mevcut hedefleri yeniler;
+Raw dahil katmanlar sürümlü/değişmez arşiv olarak saklanmaz.
+Veriler, günlükler ve `.env` yerel tutulur.
 
-Alternatif olarak analiz sürecini gözlemlemek için notebooks/demo.ipynb dosyasını kullanabilirsiniz.
+## Dönüşüm ve hesaplama
 
-Alternatif (Windows Otomasyon): Pipeline'ı her sabah otomatik çalıştırmak için run_pipeline.bat dosyasını Windows Görev Zamanlayıcı'ya tanımlayabilirsiniz.
+Silver katmanı ham kur alanındaki null kayıtları eler, tarihi `dd-MM-yyyy`
+biçiminden date'e ve kur değerini double'a çevirir.
 
-------------------------------------------------------------------------------------------------------
+Gold katmanında yüzde değişim:
 
- ## Windows İçin Mühendislik Çözümleri
+```text
+((mevcut_kur - onceki_gozlem) / onceki_gozlem) * 100
+```
 
-Windows kısıtlamaları sebebiyle Spark'ın yaşadığı Unable to clear output directory hatası şu yöntemlerle çözülmüştür:
+Sonuç iki ondalığa yuvarlanır. “Önceki gözlem” önceki takvim günü olmak
+zorunda değildir. İlk satırdaki eksik önceki değer/değişim mevcut kodda 0 ile
+doldurulur. Şemalar ve veri kalitesi sınırları [mimari notunda](docs/ARCHITECTURE.md)
+açıklanır.
 
-Hybrid Write: Yazma işlemi öncesi shutil.rmtree(path, ignore_errors=True) ile dosya sistemine doğrudan müdahale.
+## Dosya rehberi
 
-Single Partition (Coalesce): .coalesce(1) kullanılarak yüzlerce küçük .crc dosyasının kilitlenmesi engellenmiş ve raporlama performansı artırılmıştır.
-------------------------------------------------------------------------------------------------------
+| Yol | Görevi |
+| --- | --- |
+| [src/pipelines/main.py](src/pipelines/main.py) | Üç katmanı sırayla çağırma, süre ve hata yönetimi |
+| [src/ingestion/ingestion.py](src/ingestion/ingestion.py) | EVDS bağlantısı ve Raw yazımı |
+| [src/processing.py](src/processing.py) | Silver dönüşümleri |
+| [src/features.py](src/features.py) | Önceki gözlem ve değişim hesabı |
+| [src/utils.py](src/utils.py) | Ana akışın kullandığı logger ve yardımcılar |
+| [notebooks/demo.ipynb](notebooks/demo.ipynb) | Ayrı keşif örneği; CSV ve Parquet çıktısı |
+| [run_pipeline.bat](run_pipeline.bat) | Windows'ta modülü çağıran betik |
+| [tests/test_pipeline_failures.py](tests/test_pipeline_failures.py) | Hata ve yol çözümü regresyon kontrolleri |
 
-## Kaynakça (References)
-Bu projenin mimarisi ve ETL süreçleri aşağıdaki modern metodoloji takip edilerek geliştirilmiştir:
+Notebook, Ocak 2024 verisini kullanır ve değişimi dört ondalığa yuvarlar.
+Ana pipeline'ın çıktısıyla aynı deney değildir. Notebook'u `notebooks/`
+dizininden açın; API anahtarı repo kökündeki `.env` dosyasından okunur.
 
-* **Matt Palmer** - *Understanding ETL: Data Pipelines for Modern Data Architectures* (2024, O'Reilly Media, Inc.)
+## Doğrulama ve geliştirme alanları
 
-## 🤝 Teşekkür (Acknowledgments)
-* Teknik istişareleri ve desteği için **[Onur Güner]**'e teşekkürler.
+```powershell
+python -m unittest discover -s tests -v
+```
 
-------------------------------------------------------------------------------------------------------
+Testler ağ/JVM kullanmadan hata akışını denetler. Canlı EVDS ve gerçek Spark
+koşusu için API erişimi ve uyumlu ortam gerekir.
+
+Sıradaki alanlar: yapılandırılabilir seri/tarih, daha kapsamlı veri kalitesi
+kontrolleri, sürümlü/atomik yazım, gerçek Spark dönüşüm testleri ve ortam sürüm kilidi.
+
+## Kaynaklar ve teşekkür
+
+- [TCMB EVDS](https://evds2.tcmb.gov.tr/)
+- [Apache Spark / PySpark kurulumu](https://spark.apache.org/docs/latest/api/python/getting_started/install.html)
+- [Veri mimarisi ve notebook farkları](docs/ARCHITECTURE.md)
+- [Çalıştırma ve sorun giderme](docs/OPERATIONS.md)
+
+Teknik istişareleri ve desteği için **Onur Güner**'e teşekkürler.
